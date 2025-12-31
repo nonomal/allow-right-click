@@ -98,5 +98,23 @@
   });
 }
 
+// Unblocked elements on mouse down event that are protected by remote stylesheets
+{
+  const mousedown = e => {
+    const es = document.elementsFromPoint(e.clientX, e.clientY);
+    for (const e of es) {
+      const style = getComputedStyle(e);
+      if (style.userSelect === 'none') {
+        e.style['user-select'] = 'initial';
+      }
+    }
+  };
+
+  document.addEventListener('mousedown', mousedown, true);
+  window.pointers.run.add(() => {
+    document.removeEventListener('mousedown', mousedown, true);
+  });
+}
+
 // eslint-disable-next-line semi
 ''

@@ -15,6 +15,7 @@
 // https://www.taiwanratings.com/portal/front/listSpRating -> Ctrl + C on Windows
 // https://www.yuanta.com.tw/eYuanta/securities/Node/Index?MainId=00412&C1=2018040407582803&C2=2018040401231916&ID=2018040401231916&Level=2&rnd=28994 -> select a large portion of the table
 // https://brickset.com/signup -> no paste context menu on email address
+// https://www.zhihu.com/market/pub/120050855/manuscript/1289617973419298816 -> user-select is blocked with remote stylesheet
 
 window.pointers = window.pointers || {
   run: new Set(),

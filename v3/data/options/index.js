@@ -94,38 +94,13 @@ const check = () => chrome.permissions.contains({
   origins: ['*://*/*']
 }, granted => {
   document.getElementById('whitelist').disabled = granted === false;
-  document.getElementById('hostaccess').checked = granted;
+  // Update button states based on permission status
+  document.getElementById('hostaccess-add').disabled = granted;
+  document.getElementById('hostaccess-remove').disabled = !granted;
 });
 check();
 
-document.getElementById('hostaccess').onchange = e => {
-  if (e.target.checked) {
-    chrome.permissions.request({
-      origins: ['*://*/*']
-    }, granted => {
-      const lastError = chrome.runtime.lastError;
-
-      if (lastError) {
-        notify(lastError.message);
-      }
-
-      document.getElementById('whitelist').disabled = granted === false;
-      document.getElementById('hostaccess').checked = granted;
-      chrome.storage.local.set({
-        monitor: granted
-      });
-
-      check();
-    });
-  }
-  else {
-    document.getElementById('whitelist').disabled = true;
-    chrome.permissions.remove({
-      origins: ['*://*/*']
-    });
-  }
-};
-document.getElementById('subframe').onclick = () => {
+document.getElementById('hostaccess-add').onclick = () => {
   chrome.permissions.request({
     origins: ['*://*/*']
   }, granted => {
@@ -137,13 +112,16 @@ document.getElementById('subframe').onclick = () => {
     else {
       notify(granted ? 'Permission granted' : 'Permission denied');
     }
+
+    document.getElementById('whitelist').disabled = granted === false;
     check();
   });
 };
-document.getElementById('no-subframe').onclick = () => {
+
+document.getElementById('hostaccess-remove').onclick = () => {
   chrome.permissions.remove({
     origins: ['*://*/*']
-  }, granted => {
+  }, removed => {
     const lastError = chrome.runtime.lastError;
 
     if (lastError) {
@@ -151,7 +129,9 @@ document.getElementById('no-subframe').onclick = () => {
     }
     else {
       notify('Permission removed');
+      document.getElementById('whitelist').disabled = true;
     }
+
     check();
   });
 };
